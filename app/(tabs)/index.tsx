@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  SafeAreaView,
   ScrollView,
   Text,
   View,
@@ -50,7 +49,9 @@ export default function Index() {
             className="mt-10 self-center"
           />
         ) : moviesError ? (
-          <Text>Error: {moviesError?.message}</Text>
+          <Text className="text-red-500 px-5 my-3">
+            Error: {moviesError?.message}
+          </Text>
         ) : (
           <View className="flex-1 mt-5">
             <SearchBar
