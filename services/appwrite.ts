@@ -1,4 +1,4 @@
-import { Movie } from "@/interfaces/interfaces";
+import { Movie, TrendingMovie } from "@/interfaces/interfaces";
 import { Client, Databases, Account, Query, ID } from "react-native-appwrite";
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
@@ -39,5 +39,29 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
   } catch (error) {
     console.error("Error updating search count:", error);
     throw new Error("Failed to update search count");
+  }
+};
+
+export const getTrendingMovies = async (): Promise<
+  TrendingMovie[] | undefined
+> => {
+  try {
+    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+      Query.limit(5),
+      Query.orderDesc("count"),
+    ]);
+
+    const trendingMovies: TrendingMovie[] = result.documents.map((doc) => ({
+      searchTerm: doc.searchTerm,
+      movie_id: doc.movie_id,
+      title: doc.title,
+      count: doc.count,
+      poster_url: doc.poster_url,
+    }));
+
+    return trendingMovies;
+  } catch (error) {
+    console.error("Error fetching trending movies:", error);
+    throw new Error("Failed to fetch trending movies");
   }
 };
