@@ -37,7 +37,7 @@ export const TabBarIcon = ({ title, icon, focused }: TabBarIconProps) => {
     </>
   );
 };
-export default function _Layout() {
+export default function AppLayout() {
   return (
     <Tabs
       screenOptions={{
