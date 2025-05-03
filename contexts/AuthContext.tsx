@@ -1,12 +1,12 @@
 import { account } from "@/services/appwrite";
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { Text, View } from "react-native";
 import { Models } from "react-native-appwrite";
 
 // Define the shape of our authentication context data
 export interface AuthContextType {
   session: Models.Session | null;
-  user: any; // Will be replaced with a more specific type later
+  user: Models.User<Models.Preferences> | null;
   signin: ({ email, password }: { email: string; password: string }) => void;
   sigout: () => Promise<void>;
 }
@@ -20,9 +20,32 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [session, setSession] = useState<Models.Session | null>(null);
-  const [user, setUser] = useState<any>(false);
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
+    null
+  );
+
+  useEffect(() => {
+    initLoading();
+  }, []);
+
+  const initLoading = async () => {
+    checkoutSession();
+  };
+
+  const checkoutSession = async () => {
+    try {
+      const responseSession = await account.getSession("current");
+      setSession(responseSession);
+      const responseUser = await account.get();
+      setUser(responseUser);
+    } catch (error) {
+      console.error("Error checking session:", error);
+      throw new Error("Failed to check session");
+    }
+    setLoading(false);
+  };
 
   const signin = async ({
     email,
