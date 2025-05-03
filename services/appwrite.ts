@@ -1,4 +1,5 @@
 import { Movie, TrendingMovie } from "@/interfaces/interfaces";
+import { Platform } from "react-native";
 import { Client, Databases, Account, Query, ID } from "react-native-appwrite";
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
@@ -6,6 +7,15 @@ const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const client = new Client()
   .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!)
   .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!);
+
+switch (Platform.OS) {
+  case "android":
+    client.setPlatform(process.env.EXPO_PUBLIC_APPWRITE_PACKAGE_NAME!);
+    break;
+  case "ios":
+    client.setPlatform(process.env.EXPO_PUBLIC_APPWRITE_BUNDLE_ID!);
+    break;
+}
 
 const database = new Databases(client);
 const account = new Account(client);
@@ -65,3 +75,5 @@ export const getTrendingMovies = async (): Promise<
     throw new Error("Failed to fetch trending movies");
   }
 };
+
+export { account };
