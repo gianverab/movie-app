@@ -7,7 +7,13 @@ import { Models } from "react-native-appwrite";
 interface AuthContextType {
   session: Models.Session | null;
   user: any; // Will be replaced with a more specific type later
-  signin: () => Promise<void>;
+  signin: ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => Promise<void>;
   sigout: () => Promise<void>;
 }
 
@@ -24,7 +30,28 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [session, setSession] = useState<Models.Session | null>(null);
   const [user, setUser] = useState<any>(false);
 
-  const signin = async (): Promise<void> => {};
+  const signin = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }): Promise<void> => {
+    setLoading(true);
+    try {
+      const responseSession = await account.createEmailPasswordSession(
+        email,
+        password
+      );
+      setSession(responseSession);
+      const responseUser = await account.get();
+      setUser(responseUser);
+    } catch (error) {
+      console.error("Error signing in:", error);
+      throw new Error("Failed to sign in");
+    }
+    setLoading(false);
+  };
 
   const sigout = async (): Promise<void> => {};
 
