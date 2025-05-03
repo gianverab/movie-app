@@ -1,19 +1,13 @@
 import { account } from "@/services/appwrite";
 import React, { createContext, useState } from "react";
-import { Text, SafeAreaView } from "react-native";
+import { Text, View } from "react-native";
 import { Models } from "react-native-appwrite";
 
 // Define the shape of our authentication context data
 export interface AuthContextType {
   session: Models.Session | null;
   user: any; // Will be replaced with a more specific type later
-  signin: ({
-    email,
-    password,
-  }: {
-    email: string;
-    password: string;
-  }) => Promise<void>;
+  signin: ({ email, password }: { email: string; password: string }) => void;
   sigout: () => Promise<void>;
 }
 
@@ -65,9 +59,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <AuthContext.Provider value={contextData}>
       {loading ? (
-        <SafeAreaView>
-          <Text>Loading...</Text>
-        </SafeAreaView>
+        <View className="flex-1 bg-primary">
+          <Text className="text-5xl text-dark-200 font-bold">Loading...</Text>
+        </View>
       ) : (
         children
       )}
