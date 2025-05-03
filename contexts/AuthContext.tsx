@@ -4,7 +4,7 @@ import { Text, SafeAreaView } from "react-native";
 import { Models } from "react-native-appwrite";
 
 // Define the shape of our authentication context data
-interface AuthContextType {
+export interface AuthContextType {
   session: Models.Session | null;
   user: any; // Will be replaced with a more specific type later
   signin: ({
