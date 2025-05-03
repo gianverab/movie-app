@@ -5,24 +5,24 @@ interface FormInputProps {
   onChangeText: (str: string) => void;
   placeholder: string;
   value: string;
-  label: string;
+  secureTextEntry?: boolean;
 }
 
 const FormInput = ({
   placeholder,
   onChangeText,
   value,
-  label,
+  secureTextEntry,
 }: FormInputProps) => {
   return (
     <View className="flex-row items-center bg-dark-200 rounded-full px-5 py-4">
-      <Text className="text-white text-lg font-normal mt-5 mb-3">{label}</Text>
       <TextInput
         onChangeText={onChangeText}
         placeholder={placeholder}
         value={value}
         className="flex-1 text-white ml-2"
         placeholderTextColor="#a8b5db"
+        secureTextEntry={secureTextEntry}
       />
     </View>
   );

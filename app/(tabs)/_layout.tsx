@@ -6,9 +6,10 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { Tabs } from "expo-router";
+import { Tabs, Redirect } from "expo-router";
 import { images } from "@/constants/images";
 import { icons } from "@/constants/icons";
+import { useAuth } from "@/hooks/useAuth";
 
 interface TabBarIconProps {
   title: string;
@@ -38,6 +39,10 @@ export const TabBarIcon = ({ title, icon, focused }: TabBarIconProps) => {
   );
 };
 export default function AppLayout() {
+  const { session } = useAuth();
+  if (!session) {
+    return <Redirect href="/(auth)/signin" />;
+  }
   return (
     <Tabs
       screenOptions={{
