@@ -1,4 +1,4 @@
-import { View, TextInput, Text } from "react-native";
+import { View, TextInput } from "react-native";
 import React from "react";
 
 interface FormInputProps {
