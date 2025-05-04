@@ -8,7 +8,7 @@ export interface AuthContextType {
   session: Models.Session | null;
   user: Models.User<Models.Preferences> | null;
   signin: ({ email, password }: { email: string; password: string }) => void;
-  sigout: () => Promise<void>;
+  singout: () => Promise<void>;
 }
 
 // Create the context with a default value
@@ -70,13 +70,24 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   };
 
-  const sigout = async (): Promise<void> => {};
+  const singout = async (): Promise<void> => {
+    setLoading(true);
+    try {
+      await account.deleteSession("current");
+      setSession(null);
+      setUser(null);
+    } catch (error) {
+      console.error("Error signing out:", error);
+      throw new Error("Failed to sign out");
+    }
+    setLoading(false);
+  };
 
   const contextData: AuthContextType = {
     session,
     user,
     signin,
-    sigout,
+    singout,
   };
 
   return (
